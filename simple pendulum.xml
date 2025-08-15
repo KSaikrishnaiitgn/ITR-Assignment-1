@@ -1,0 +1,32 @@
+<mujoco model="inverted_pendulum">
+    <compiler angle="degree"/>
+    <option gravity="0 0 -9.81" timestep="0.002"/>
+
+    <!-- Initial conditions -->
+    <keyframe>
+        <!-- qpos: [cart_pos, hinge_angle], qvel: [cart_vel, hinge_vel] -->
+        <key name="start" qpos="0 45" qvel="0 2"/>
+    </keyframe>
+
+    <!-- Ground plane -->
+    <worldbody>
+        <geom name="floor" type="plane" size="5 5 0.1" rgba="0.8 0.9 0.8 1"/>
+
+        <!-- Cart -->
+        <body name="cart" pos="0 0 0.05">
+            <joint name="slider" type="slide" axis="1 0 0" limited="false"/>
+            <geom type="box" size="0.1 0.05 0.05" rgba="0.2 0.2 0.8 1" mass="1"/>
+
+            <!-- Pendulum pole -->
+            <body name="pole" pos="0 0 0" euler="0 30 0">
+                <joint name="hinge" type="hinge" axis="0 1 0" limited="false" damping="0.01"/>
+                <geom type="capsule" fromto="0 0 0 0 0 1" size="0.02" rgba="0.8 0.2 0.2 1" mass="0.5"/>
+            </body>
+        </body>
+    </worldbody>
+
+    <!-- Actuator -->
+    <actuator>
+        <motor joint="hinge" ctrlrange="-1 1" gear="1"/>
+    </actuator>
+</mujoco>
